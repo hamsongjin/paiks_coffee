@@ -120,6 +120,66 @@ export type Database = {
         };
         Relationships: [];
       };
+      order: {
+        Row: {
+          seq: number;
+          order_no: string;
+          total_price: number | null;
+          payment_method: string;
+          order_state: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          seq?: number;
+          order_no: string;
+          total_price?: number | null;
+          payment_method: string;
+          order_state: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          seq?: number;
+          order_no?: string;
+          total_price?: number | null;
+          payment_method?: string;
+          order_state?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      order_goods: {
+        Row: {
+          seq: number;
+          order_no: string;
+          goods_no: number;
+          goods_options: string;
+          order_state: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          seq?: number;
+          order_no: string;
+          goods_no: number;
+          goods_options: string;
+          order_state?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          seq?: number;
+          order_no?: string;
+          goods_no?: number;
+          goods_options?: string;
+          order_state?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
