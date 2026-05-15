@@ -1,6 +1,7 @@
 import type { Database } from "@/types/database";
 
 export type GoodsRow = Database["public"]["Tables"]["goods"]["Row"];
+export type GoodsCategoryRow = Database["public"]["Tables"]["goods_cate"]["Row"];
 export type GoodsOptionGroupRow = Database["public"]["Tables"]["options_group"]["Row"];
 export type GoodsOptionRow = Database["public"]["Tables"]["options"]["Row"];
 

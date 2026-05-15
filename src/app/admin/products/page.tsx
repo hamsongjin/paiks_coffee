@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { ProductImage } from "@/components/admin/product-image";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import type { AdminProductListItem } from "@/types/admin-products";
 
@@ -50,12 +49,12 @@ async function updateProductStatus(
   goodsNo: number,
   update: Pick<AdminProductListItem, "soldout_fl"> | Pick<AdminProductListItem, "del_fl">,
 ) {
-  let supabase: ReturnType<typeof createAdminClient>;
+  let supabase: Awaited<ReturnType<typeof createClient>>;
 
   try {
-    supabase = createAdminClient();
+    supabase = await createClient();
   } catch (error) {
-    return error instanceof Error ? error.message : "관리자 Supabase client 생성에 실패했습니다.";
+    return error instanceof Error ? error.message : "Supabase client 생성에 실패했습니다.";
   }
 
   const existingProductResult = await supabase

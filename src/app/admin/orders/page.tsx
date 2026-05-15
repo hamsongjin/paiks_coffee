@@ -12,6 +12,8 @@ import type { AdminOrderListItem, OrderGoodsRow, OrderRow } from "@/types/admin-
 const orderSelectColumns =
   "seq, order_no, total_price, payment_method, order_state, created_at, updated_at";
 
+export const dynamic = "force-dynamic";
+
 function OrdersErrorState({ message }: { message: string }) {
   return (
     <section className="rounded-lg border border-red-200 bg-red-50 p-5">
@@ -53,8 +55,8 @@ function OrderStructureNote() {
         </div>
       </div>
       <p className="mt-4 text-sm text-neutral-500">
-        `completed`와 `canceled`는 terminal 상태입니다. 이번 화면에서는 상태 변경 버튼을 만들지
-        않고, 이후 취소 기능을 구현할 때 terminal 주문은 변경 대상에서 제외하는 방식이 적절합니다.
+        `completed`와 `canceled`는 terminal 상태입니다. 상세 화면의 상태 변경 기능에서도 terminal
+        주문은 변경 대상에서 제외합니다.
       </p>
     </section>
   );
@@ -68,7 +70,23 @@ function getItemCountByOrderNo(orderGoodsRows: Pick<OrderGoodsRow, "order_no">[]
 }
 
 export default async function AdminOrdersPage() {
-  const supabase = await createClient();
+  let supabase: Awaited<ReturnType<typeof createClient>>;
+
+  try {
+    supabase = await createClient();
+  } catch (error) {
+    return (
+      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
+        <header>
+          <p className="text-sm font-medium text-neutral-500">주문 관리</p>
+          <h1 className="mt-2 text-2xl font-semibold text-neutral-950">Orders</h1>
+        </header>
+        <OrdersErrorState
+          message={error instanceof Error ? error.message : "Supabase client 생성에 실패했습니다."}
+        />
+      </main>
+    );
+  }
 
   const ordersResult = await supabase
     .from("order")

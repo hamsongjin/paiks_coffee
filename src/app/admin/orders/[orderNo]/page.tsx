@@ -1,8 +1,14 @@
 import Link from "next/link";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import {
+  canTransitionOrderStatus,
   formatOrderDate,
   formatOrderPrice,
+  getOrderStatusActions,
+  isTerminalOrderStatus,
+  ORDER_STATUS_LABELS,
   OrderStatusBadge,
   toOrderStatus,
 } from "@/lib/admin/orders";
@@ -21,11 +27,145 @@ const orderSelectColumns =
 const orderGoodsSelectColumns =
   "seq, order_no, goods_no, goods_options, order_state, created_at, updated_at";
 
+export const dynamic = "force-dynamic";
+
 type AdminOrderDetailPageProps = {
   params: Promise<{
     orderNo: string;
   }>;
+  searchParams: Promise<{
+    status_error?: string;
+  }>;
 };
+
+function getOrderStatusErrorRedirectUrl(orderNo: string, message: string) {
+  return `/admin/orders/${encodeURIComponent(orderNo)}?status_error=${encodeURIComponent(message)}`;
+}
+
+function getOrderNoFromFormData(formData: FormData) {
+  const orderNo = formData.get("order_no");
+
+  return typeof orderNo === "string" && orderNo.trim() ? orderNo.trim() : null;
+}
+
+async function updateOrderStatus(orderNo: string, nextOrderStatusValue: FormDataEntryValue | null) {
+  const nextOrderStatus = toOrderStatus(
+    typeof nextOrderStatusValue === "string" ? nextOrderStatusValue : null,
+  );
+
+  if (nextOrderStatus === "unknown") {
+    return "변경할 주문 상태 값이 올바르지 않습니다.";
+  }
+
+  let supabase: Awaited<ReturnType<typeof createClient>>;
+
+  try {
+    supabase = await createClient();
+  } catch (error) {
+    return error instanceof Error ? error.message : "Supabase client 생성에 실패했습니다.";
+  }
+
+  const existingOrderResult = await supabase
+    .from("order")
+    .select("order_no, order_state")
+    .eq("order_no", orderNo)
+    .maybeSingle();
+
+  if (existingOrderResult.error) {
+    return existingOrderResult.error.message;
+  }
+
+  if (!existingOrderResult.data) {
+    return `order_no ${orderNo}에 해당하는 주문이 없습니다.`;
+  }
+
+  const currentOrderStatus = toOrderStatus(existingOrderResult.data.order_state);
+
+  if (!canTransitionOrderStatus(currentOrderStatus, nextOrderStatus)) {
+    return `${currentOrderStatus} 상태에서 ${nextOrderStatus} 상태로 변경할 수 없습니다.`;
+  }
+
+  const updatedAt = new Date().toISOString();
+  const orderUpdateResult = await supabase
+    .from("order")
+    .update({ order_state: nextOrderStatus, updated_at: updatedAt })
+    .eq("order_no", orderNo)
+    .eq("order_state", currentOrderStatus)
+    .select("order_state")
+    .maybeSingle();
+
+  if (orderUpdateResult.error) {
+    return orderUpdateResult.error.message;
+  }
+
+  if (!orderUpdateResult.data) {
+    return "주문 상태가 다른 요청으로 변경되었습니다. 새로고침 후 다시 시도하세요.";
+  }
+
+  const orderGoodsUpdateResult = await supabase
+    .from("order_goods")
+    .update({ order_state: nextOrderStatus, updated_at: updatedAt })
+    .eq("order_no", orderNo);
+
+  if (orderGoodsUpdateResult.error) {
+    return orderGoodsUpdateResult.error.message;
+  }
+
+  const verifyOrderResult = await supabase
+    .from("order")
+    .select("order_state")
+    .eq("order_no", orderNo)
+    .maybeSingle();
+
+  if (verifyOrderResult.error) {
+    return verifyOrderResult.error.message;
+  }
+
+  if (verifyOrderResult.data?.order_state !== nextOrderStatus) {
+    return "order.order_state 변경이 DB에 반영되지 않았습니다.";
+  }
+
+  const verifyOrderGoodsResult = await supabase
+    .from("order_goods")
+    .select("seq, order_state")
+    .eq("order_no", orderNo);
+
+  if (verifyOrderGoodsResult.error) {
+    return verifyOrderGoodsResult.error.message;
+  }
+
+  const mismatchedOrderGoods = (verifyOrderGoodsResult.data ?? []).some(
+    (item) => item.order_state !== nextOrderStatus,
+  );
+
+  if (mismatchedOrderGoods) {
+    return "order_goods.order_state 변경이 일부 row에 반영되지 않았습니다.";
+  }
+
+  revalidatePath("/admin/orders");
+  revalidatePath(`/admin/orders/${orderNo}`);
+
+  return null;
+}
+
+async function updateOrderStatusAction(formData: FormData) {
+  "use server";
+
+  const orderNo = getOrderNoFromFormData(formData);
+  const nextOrderStatus = formData.get("next_order_status");
+
+  if (!orderNo) {
+    redirect(getOrderStatusErrorRedirectUrl("", "주문 상태 변경 요청이 올바르지 않습니다."));
+  }
+
+  const errorMessage = await updateOrderStatus(orderNo, nextOrderStatus);
+
+  if (errorMessage) {
+    redirect(getOrderStatusErrorRedirectUrl(orderNo, errorMessage));
+  }
+
+  redirect(`/admin/orders/${encodeURIComponent(orderNo)}`);
+}
 
 function OrderDetailErrorState({ message }: { message: string }) {
   return (
@@ -36,6 +176,15 @@ function OrderDetailErrorState({ message }: { message: string }) {
         해결 방법: `order`, `order_goods`, `goods` 테이블의 RLS 조회 정책과 Data API 노출
         설정을 확인하세요.
       </p>
+    </section>
+  );
+}
+
+function OrderStatusError({ message }: { message: string }) {
+  return (
+    <section className="rounded-lg border border-red-200 bg-red-50 p-4">
+      <h2 className="text-sm font-semibold text-red-950">주문 상태 변경 실패</h2>
+      <p className="mt-2 text-sm text-red-800">원인: {message}</p>
     </section>
   );
 }
@@ -72,7 +221,7 @@ function BackToOrdersLink() {
 }
 
 function TerminalStatusNote({ order }: { order: AdminOrderDetail }) {
-  const isTerminal = order.order_status === "completed" || order.order_status === "canceled";
+  const isTerminal = isTerminalOrderStatus(order.order_status);
 
   return (
     <section
@@ -86,9 +235,68 @@ function TerminalStatusNote({ order }: { order: AdminOrderDetail }) {
         terminal 상태 처리
       </h2>
       <p className={isTerminal ? "mt-2 text-sm text-neutral-700" : "mt-2 text-sm text-blue-800"}>
-        `completed`와 `canceled`는 terminal 상태로 보고 이후 상태 변경 대상에서 제외합니다. 현재
-        주문의 app `order_status`는 `{order.order_status}`이고, DB 원본 컬럼은
+        상태 변경은 `pending → cooking → completed`, `pending/cooking → canceled`만
+        허용합니다. `completed`와 `canceled`는 terminal 상태로 보고 이후 상태 변경 대상에서
+        제외합니다. 현재 주문의 app `order_status`는 `{order.order_status}`이고, DB 원본 컬럼은
         `order_state = {order.order_state}`입니다.
+      </p>
+    </section>
+  );
+}
+
+function OrderStatusActionPanel({ order }: { order: AdminOrderDetail }) {
+  const actions = getOrderStatusActions(order.order_status);
+  const isTerminal = isTerminalOrderStatus(order.order_status);
+
+  const buttonClassName = {
+    primary:
+      "rounded-md bg-neutral-950 px-3 py-2 text-sm font-medium text-white hover:bg-neutral-800",
+    danger:
+      "rounded-md border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50",
+  };
+
+  return (
+    <section className="rounded-lg border border-neutral-200 bg-white p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h2 className="text-base font-semibold text-neutral-950">주문 상태 변경</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            DB에는 `order_state`로 저장하고, 화면에서는 `order_status`로 표시합니다.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {actions.map((action) => (
+            <form action={updateOrderStatusAction} key={action.next_order_status}>
+              <input name="order_no" type="hidden" value={order.order_no} />
+              <input name="next_order_status" type="hidden" value={action.next_order_status} />
+              <button className={buttonClassName[action.variant]} type="submit">
+                {action.label}
+              </button>
+            </form>
+          ))}
+          {actions.length === 0 ? (
+            <button
+              className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm font-medium text-neutral-400"
+              disabled
+              type="button"
+            >
+              상태 변경 불가
+            </button>
+          ) : null}
+        </div>
+      </div>
+      <p className="mt-4 text-sm text-neutral-600">
+        현재 상태는 `{order.order_status}` ({ORDER_STATUS_LABELS[order.order_status]})입니다. 다음
+        상태 후보는{" "}
+        {actions.length > 0
+          ? actions.map((action) => `\`${action.next_order_status}\``).join(", ")
+          : isTerminal
+            ? "terminal 상태라 없습니다."
+            : "정의되지 않았습니다."}
+      </p>
+      <p className="mt-2 text-xs text-neutral-500">
+        상태 변경 시 `order.order_state`와 같은 `order_no`를 가진 `order_goods.order_state`를
+        함께 동기화합니다.
       </p>
     </section>
   );
@@ -116,10 +324,27 @@ function getCurrentCatalogLineTotal(item: AdminOrderGoodsItem) {
   return Number.isFinite(price) ? price : null;
 }
 
-export default async function AdminOrderDetailPage({ params }: AdminOrderDetailPageProps) {
+export default async function AdminOrderDetailPage({
+  params,
+  searchParams,
+}: AdminOrderDetailPageProps) {
   const { orderNo: orderNoParam } = await params;
+  const { status_error } = await searchParams;
   const orderNo = decodeURIComponent(orderNoParam);
-  const supabase = await createClient();
+  let supabase: Awaited<ReturnType<typeof createClient>>;
+
+  try {
+    supabase = await createClient();
+  } catch (error) {
+    return (
+      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
+        <BackToOrdersLink />
+        <OrderDetailErrorState
+          message={error instanceof Error ? error.message : "Supabase client 생성에 실패했습니다."}
+        />
+      </main>
+    );
+  }
 
   const orderResult = await supabase
     .from("order")
@@ -209,6 +434,7 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
       <BackToOrdersLink />
+      {status_error ? <OrderStatusError message={status_error} /> : null}
 
       <header>
         <p className="text-sm font-medium text-neutral-500">주문 상세</p>
@@ -244,6 +470,8 @@ export default async function AdminOrderDetailPage({ params }: AdminOrderDetailP
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1.3fr)]">
         <div className="flex flex-col gap-6">
+          <OrderStatusActionPanel order={order} />
+
           <div className="rounded-lg border border-neutral-200 bg-white p-5">
             <h2 className="text-base font-semibold text-neutral-950">order</h2>
             <dl className="mt-3">

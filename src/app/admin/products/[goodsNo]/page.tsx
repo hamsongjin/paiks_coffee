@@ -6,9 +6,12 @@ import type {
   AdminProductDetail,
   AdminProductOptionGroup,
   AdminProductOptionItem,
+  GoodsCategoryRow,
   GoodsOptionGroupRow,
   GoodsOptionRow,
 } from "@/types/admin-products";
+
+import { ProductEditForm } from "./product-edit-form";
 
 const goodsSelectColumns =
   "goods_no, cate_cd, goods_nm, goods_en_nm, goods_price, ice_fl, best_fl, new_fl, soldout_fl, del_fl, created_at, updated_at";
@@ -132,6 +135,24 @@ export default async function AdminProductDetailPage({ params }: AdminProductDet
     );
   }
 
+  const categoriesResult = await supabase
+    .from("goods_cate")
+    .select("cate_cd, cate_nm")
+    .order("cate_cd", { ascending: true });
+
+  if (categoriesResult.error) {
+    return (
+      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
+        <Link href="/admin/products" className="text-sm text-neutral-500 hover:text-neutral-950">
+          Back to products
+        </Link>
+        <ProductErrorState message={categoriesResult.error.message} />
+      </main>
+    );
+  }
+
+  const categories = (categoriesResult.data ?? []) as GoodsCategoryRow[];
+
   const groupResult = await supabase
     .from("options_group")
     .select("seq, goods_no, opt_no")
@@ -200,6 +221,8 @@ export default async function AdminProductDetailPage({ params }: AdminProductDet
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(420px,1.3fr)]">
         <div className="flex flex-col gap-6">
+          <ProductEditForm product={product} categories={categories} />
+
           <div className="rounded-lg border border-neutral-200 bg-white p-5">
             <h2 className="text-base font-semibold text-neutral-950">image</h2>
             <div className="mt-4">
