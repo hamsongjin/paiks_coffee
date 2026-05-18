@@ -50,11 +50,14 @@ export default async function MenuPage({ searchParams }: MenuPageProps) {
   const activeCategory = categories.find((category) => category.cate_cd === activeCateCd);
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <div className="mx-auto flex min-h-screen max-w-md flex-col bg-white">
+    <main className="kiosk-page">
+      <div className="kiosk-shell flex min-h-screen flex-col pb-[calc(8.75rem+env(safe-area-inset-bottom))]">
         <header className="sticky top-0 z-10 border-b border-neutral-100 bg-white/95 px-4 py-4 backdrop-blur">
-          <p className="text-xs font-semibold uppercase text-neutral-500">Paik&apos;s Coffee</p>
-          <h1 className="mt-1 text-2xl font-bold text-neutral-950">메뉴</h1>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400">
+            Paik&apos;s Coffee
+          </p>
+          <h1 className="mt-1 text-[28px] font-bold leading-tight text-neutral-950">메뉴</h1>
+          <p className="mt-1 text-sm text-neutral-500">원하는 음료를 선택하고 아래에서 바로 담아주세요.</p>
         </header>
 
         {categoriesResult.error || productsResult.error ? (
@@ -72,12 +75,14 @@ export default async function MenuPage({ searchParams }: MenuPageProps) {
             <section className="px-4 py-4">
               <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="font-mono text-xs text-neutral-400">{activeCateCd}</p>
+                  <p className="font-mono text-[11px] text-neutral-400">{activeCateCd}</p>
                   <h2 className="mt-1 text-lg font-semibold text-neutral-950">
                     {activeCategory?.cate_nm ?? "카테고리"}
                   </h2>
                 </div>
-                <p className="text-sm text-neutral-500">{visibleProducts.length}개</p>
+                <p className="rounded-full bg-neutral-100 px-2.5 py-1 text-sm font-semibold text-neutral-600">
+                  {visibleProducts.length}개
+                </p>
               </div>
             </section>
 

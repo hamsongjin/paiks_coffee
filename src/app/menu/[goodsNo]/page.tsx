@@ -177,8 +177,8 @@ export default async function MenuProductDetailPage({ params }: MenuProductDetai
   const isSoldOut = product.soldout_fl === "y";
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <div className="mx-auto min-h-screen max-w-md bg-white">
+    <main className="kiosk-page">
+      <div className="kiosk-shell min-h-screen pb-[calc(8.75rem+env(safe-area-inset-bottom))]">
         <header className="sticky top-0 z-10 border-b border-neutral-100 bg-white/95 px-4 py-4 backdrop-blur">
           <Link href="/menu" className="text-sm font-medium text-neutral-500">
             메뉴로 돌아가기
@@ -190,7 +190,9 @@ export default async function MenuProductDetailPage({ params }: MenuProductDetai
 
           <div className="mt-5 flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="text-2xl font-bold text-neutral-950">{product.goods_nm}</h1>
+              <h1 className="text-[28px] font-bold leading-tight text-neutral-950">
+                {product.goods_nm}
+              </h1>
               {product.goods_en_nm ? (
                 <p className="mt-1 text-sm text-neutral-500">{product.goods_en_nm}</p>
               ) : null}
@@ -202,11 +204,11 @@ export default async function MenuProductDetailPage({ params }: MenuProductDetai
             ) : null}
           </div>
 
-          <p className="mt-4 text-lg font-bold text-neutral-950">
+          <p className="mt-4 inline-flex rounded-full bg-neutral-100 px-3 py-1.5 text-lg font-bold text-neutral-950">
             {formatPrice(product.goods_price)}원
           </p>
           {isSoldOut ? (
-            <p className="mt-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p className="mt-3 rounded-2xl bg-red-50 px-3 py-3 text-sm text-red-700">
               현재 주문할 수 없는 상품입니다.
             </p>
           ) : null}
