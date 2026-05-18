@@ -46,7 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/menu/${product.goods_no}`}
-      className="grid min-h-40 grid-cols-[minmax(0,1fr)_104px] gap-4 border-b border-neutral-100 bg-white px-4 py-4 transition duration-200 ease-out active:bg-neutral-50 last:border-b-0"
+      className="grid min-h-40 grid-cols-[minmax(0,1fr)_104px] gap-4 border-b border-neutral-100 bg-white px-4 py-4 transition duration-200 ease-out active:bg-primary-soft last:border-b-0"
       aria-label={`${product.goods_nm} 상세 보기`}
     >
       <div className="flex min-w-0 flex-col justify-between py-1">

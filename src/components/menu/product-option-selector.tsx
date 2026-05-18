@@ -147,7 +147,7 @@ function getGroupBadgeLabel(group: MenuOptionGroup) {
 
 function getGroupBadgeClassName(group: MenuOptionGroup) {
   if (isRequiredGroup(group)) {
-    return "rounded-full bg-neutral-950 px-2.5 py-1 text-[11px] font-semibold text-white";
+    return "rounded-full bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary";
   }
 
   return "rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-semibold text-neutral-600";
@@ -175,7 +175,7 @@ function getChoiceCardClassName({
   isSelected: boolean;
 }) {
   if (isSelected) {
-    return "border-neutral-950 bg-neutral-950 text-white shadow-sm";
+    return "border-primary bg-primary text-white shadow-[0_16px_30px_-20px_rgba(0,31,96,0.75)]";
   }
 
   if (disabled) {
@@ -208,11 +208,11 @@ function ChoiceIndicator({
       {variant === "radio" ? (
         <span
           className={
-            isSelected ? "h-2.5 w-2.5 rounded-full bg-neutral-950" : "h-2.5 w-2.5 rounded-full"
+            isSelected ? "h-2.5 w-2.5 rounded-full bg-primary" : "h-2.5 w-2.5 rounded-full"
           }
         />
       ) : isSelected ? (
-        <span className="text-xs font-bold leading-none text-neutral-950">✓</span>
+        <span className="text-xs font-bold leading-none text-primary">✓</span>
       ) : null}
     </span>
   );
@@ -240,7 +240,7 @@ function CounterOptionRow({
     <div
       className={
         count > 0
-          ? "flex w-full items-center justify-between gap-4 border-b border-neutral-100 bg-neutral-50 px-4 py-4 text-left text-sm text-neutral-950 last:border-b-0"
+          ? "flex w-full items-center justify-between gap-4 border-b border-primary/10 bg-primary-soft px-4 py-4 text-left text-sm text-neutral-950 last:border-b-0"
           : "flex w-full items-center justify-between gap-4 border-b border-neutral-100 bg-white px-4 py-4 text-left text-sm text-neutral-950 last:border-b-0"
       }
     >
@@ -248,7 +248,7 @@ function CounterOptionRow({
         <span
           className={
             count > 0
-              ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-950 bg-neutral-950"
+              ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-primary bg-primary"
               : "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-neutral-300 bg-white"
           }
           aria-hidden="true"
@@ -275,25 +275,25 @@ function CounterOptionRow({
             품절
           </span>
         ) : (
-          <span className="inline-flex rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-neutral-950">
+          <span className="inline-flex rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-primary">
             {getOptionAmountLabel(option)}
           </span>
         )}
         <span className="mt-3 flex items-center justify-end gap-2">
           <button
             type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-neutral-950 transition duration-200 ease-out active:scale-[0.98] disabled:cursor-not-allowed disabled:border-neutral-100 disabled:bg-neutral-100 disabled:text-neutral-300"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-primary transition duration-200 ease-out active:scale-[0.98] active:bg-primary-soft disabled:cursor-not-allowed disabled:border-neutral-100 disabled:bg-neutral-100 disabled:text-neutral-300"
             disabled={isMinusDisabled}
             onClick={() => updateCount(group, option, count - 1)}
           >
             -
           </button>
-          <span className="min-w-8 rounded-full bg-white px-2.5 py-1 text-center text-sm font-semibold text-neutral-950">
+          <span className="min-w-8 rounded-full bg-white px-2.5 py-1 text-center text-sm font-semibold text-primary">
             {count}
           </span>
           <button
             type="button"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-neutral-950 transition duration-200 ease-out active:scale-[0.98] disabled:cursor-not-allowed disabled:border-neutral-100 disabled:bg-neutral-100 disabled:text-neutral-300"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-primary transition duration-200 ease-out active:scale-[0.98] active:bg-primary-soft disabled:cursor-not-allowed disabled:border-neutral-100 disabled:bg-neutral-100 disabled:text-neutral-300"
             disabled={isPlusDisabled}
             onClick={() => updateCount(group, option, count + 1)}
           >
@@ -336,9 +336,9 @@ function SelectOptionButton({
         <span className="min-w-0">
           <span className="flex min-w-0 flex-wrap items-center gap-2">
             <span className="truncate text-sm font-semibold">{option.opt_nm}</span>
-            <span className="sr-only">{getOptionControlLabel(group, option)}</span>
+      <span className="sr-only">{getOptionControlLabel(group, option)}</span>
             {isSelected ? (
-              <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold">
+              <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-semibold text-white">
                 선택됨
               </span>
             ) : null}
@@ -363,13 +363,13 @@ function SelectOptionButton({
             품절
           </span>
         ) : (
-          <span
-            className={
-              isSelected
-                ? "inline-flex rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-neutral-950"
-                : "inline-flex rounded-full bg-neutral-100 px-2.5 py-1 text-sm font-semibold text-neutral-700"
-            }
-          >
+            <span
+              className={
+                isSelected
+                  ? "inline-flex rounded-full bg-white px-2.5 py-1 text-sm font-semibold text-primary"
+                  : "inline-flex rounded-full bg-neutral-100 px-2.5 py-1 text-sm font-semibold text-neutral-700"
+              }
+            >
             {getOptionAmountLabel(option)}
           </span>
         )}
@@ -620,7 +620,7 @@ export function ProductOptionSelector({ groupedOptions, product }: ProductOption
               type="button"
               className={
                 isSelectionReady
-                  ? "mt-4 w-full rounded-2xl bg-neutral-950 px-4 py-4 text-base font-semibold text-white transition duration-200 ease-out active:scale-[0.99]"
+                  ? "mt-4 w-full rounded-2xl bg-primary px-4 py-4 text-base font-semibold text-primary-foreground transition duration-200 ease-out active:scale-[0.99] active:bg-primary/90"
                   : "mt-4 w-full rounded-2xl bg-neutral-300 px-4 py-4 text-base font-semibold text-white"
               }
               onClick={addSelectedItemToCart}

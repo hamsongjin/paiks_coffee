@@ -13,7 +13,7 @@ export default async function OrderCompletePage({ searchParams }: OrderCompleteP
     <main className="kiosk-page">
       <div className="kiosk-shell flex min-h-screen flex-col px-4 py-6">
         <section className="flex flex-1 flex-col items-center justify-center text-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-neutral-950 text-white">
+          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-primary-foreground">
             <span className="text-xl font-bold">OK</span>
           </div>
           <p className="mt-4 text-sm font-semibold text-neutral-500">주문 접수</p>
@@ -34,7 +34,7 @@ export default async function OrderCompletePage({ searchParams }: OrderCompleteP
 
           <Link
             href="/menu"
-            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-neutral-950 px-4 text-sm font-semibold text-white transition duration-200 ease-out active:scale-[0.99]"
+            className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-primary px-4 text-sm font-semibold text-primary-foreground transition duration-200 ease-out active:scale-[0.99] active:bg-primary/90"
           >
             메뉴로 돌아가기
           </Link>

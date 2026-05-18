@@ -20,8 +20,8 @@ export function CartSummaryBar() {
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-      <div className="mx-auto flex max-w-md items-center gap-3 rounded-2xl border border-neutral-200 bg-white/95 px-4 py-3 shadow-[0_20px_50px_-20px_rgba(23,23,23,0.35)] backdrop-blur">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-neutral-950 text-white">
+      <div className="mx-auto flex max-w-md items-center gap-3 rounded-2xl border border-primary/10 bg-white/95 px-4 py-3 shadow-[0_20px_50px_-20px_rgba(0,31,96,0.35)] backdrop-blur">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
           <span className="text-sm font-bold">{itemCount}</span>
         </div>
 
@@ -39,7 +39,7 @@ export function CartSummaryBar() {
 
         <Link
           href="/cart"
-          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-neutral-950 px-4 text-sm font-semibold text-white transition duration-200 ease-out active:scale-[0.98]"
+          className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition duration-200 ease-out active:scale-[0.98] active:bg-primary/90"
         >
           장바구니 보기
         </Link>

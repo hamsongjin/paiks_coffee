@@ -20,8 +20,8 @@ export function CategoryTabs({ activeCateCd, categories }: CategoryTabsProps) {
               href={`/menu?cate_cd=${encodeURIComponent(category.cate_cd)}`}
               className={
                 isActive
-                  ? "shrink-0 rounded-full bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
-                  : "shrink-0 rounded-full bg-neutral-100 px-4 py-2.5 text-sm font-semibold text-neutral-600 transition duration-200 ease-out active:bg-neutral-200"
+                  ? "shrink-0 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_12px_28px_-18px_rgba(0,31,96,0.75)]"
+                  : "shrink-0 rounded-full bg-neutral-100 px-4 py-2.5 text-sm font-semibold text-neutral-600 transition duration-200 ease-out active:bg-primary-soft active:text-primary"
               }
             >
               {category.cate_nm}

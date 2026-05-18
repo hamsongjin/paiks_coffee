@@ -102,7 +102,7 @@ export function CartList() {
         </div>
         <Link
           href="/menu"
-          className="mt-5 inline-flex min-h-12 items-center justify-center rounded-2xl bg-neutral-950 px-5 text-sm font-semibold text-white"
+          className="mt-5 inline-flex min-h-12 items-center justify-center rounded-2xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition duration-200 ease-out active:scale-[0.98] active:bg-primary/90"
         >
           메뉴 보기
         </Link>
@@ -137,22 +137,22 @@ export function CartList() {
 
             <div className="mt-4 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-neutral-950 transition duration-200 ease-out active:scale-[0.98]"
-                  onClick={() => decreaseItem(item.id)}
-                >
-                  -
-                </button>
-                <span className="min-w-9 rounded-full bg-neutral-50 px-3 py-2 text-center text-sm font-semibold text-neutral-950">
+              <button
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-primary transition duration-200 ease-out active:scale-[0.98] active:bg-primary-soft"
+                onClick={() => decreaseItem(item.id)}
+              >
+                -
+              </button>
+                <span className="min-w-9 rounded-full bg-primary-soft px-3 py-2 text-center text-sm font-semibold text-primary">
                   {item.quantity}
                 </span>
-                <button
-                  type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-neutral-950 transition duration-200 ease-out active:scale-[0.98]"
-                  onClick={() => increaseItem(item.id)}
-                >
-                  +
+              <button
+                type="button"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-neutral-200 bg-white text-lg font-semibold text-primary transition duration-200 ease-out active:scale-[0.98] active:bg-primary-soft"
+                onClick={() => increaseItem(item.id)}
+              >
+                +
                 </button>
               </div>
               <p className="text-lg font-bold text-neutral-950">
@@ -175,7 +175,7 @@ export function CartList() {
         ) : null}
         <button
           type="button"
-          className="mt-3 w-full rounded-2xl bg-neutral-950 px-4 py-4 text-base font-semibold text-white transition duration-200 ease-out active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-neutral-300"
+          className="mt-3 w-full rounded-2xl bg-primary px-4 py-4 text-base font-semibold text-primary-foreground transition duration-200 ease-out active:scale-[0.99] active:bg-primary/90 disabled:cursor-not-allowed disabled:bg-neutral-300"
           disabled={isPending}
           onClick={submitOrder}
         >
