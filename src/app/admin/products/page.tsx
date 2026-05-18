@@ -273,12 +273,20 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
 
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-10">
-      <header>
-        <p className="text-sm font-medium text-neutral-500">상품 관리</p>
-        <h1 className="mt-2 text-2xl font-semibold text-neutral-950">Products</h1>
-        <p className="mt-2 text-sm text-neutral-500">
-          Supabase `goods` 테이블을 조회해 키오스크 상품 상태를 확인합니다.
-        </p>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-medium text-neutral-500">상품 관리</p>
+          <h1 className="mt-2 text-2xl font-semibold text-neutral-950">Products</h1>
+          <p className="mt-2 text-sm text-neutral-500">
+            Supabase `goods` 테이블을 조회해 키오스크 상품 상태를 확인합니다.
+          </p>
+        </div>
+        <Link
+          href="/admin/products/new"
+          className="inline-flex w-fit items-center rounded-md bg-neutral-950 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+        >
+          상품 등록
+        </Link>
       </header>
 
       {status_error ? <ProductStatusError message={status_error} /> : null}
