@@ -9,7 +9,7 @@ type CategoryTabsProps = {
 
 export function CategoryTabs({ activeCateCd, categories }: CategoryTabsProps) {
   return (
-    <nav className="sticky top-[73px] z-10 overflow-x-auto border-b border-neutral-100 bg-white px-4 py-3">
+    <nav className="sticky top-[92px] z-10 overflow-x-auto border-b border-neutral-100 bg-white/95 px-4 py-3 backdrop-blur">
       <div className="flex gap-2">
         {categories.map((category) => {
           const isActive = category.cate_cd === activeCateCd;
@@ -20,8 +20,8 @@ export function CategoryTabs({ activeCateCd, categories }: CategoryTabsProps) {
               href={`/menu?cate_cd=${encodeURIComponent(category.cate_cd)}`}
               className={
                 isActive
-                  ? "shrink-0 rounded-full bg-neutral-950 px-4 py-2 text-sm font-semibold text-white"
-                  : "shrink-0 rounded-full bg-neutral-100 px-4 py-2 text-sm font-semibold text-neutral-600"
+                  ? "shrink-0 rounded-full bg-neutral-950 px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
+                  : "shrink-0 rounded-full bg-neutral-100 px-4 py-2.5 text-sm font-semibold text-neutral-600 transition duration-200 ease-out active:bg-neutral-200"
               }
             >
               {category.cate_nm}

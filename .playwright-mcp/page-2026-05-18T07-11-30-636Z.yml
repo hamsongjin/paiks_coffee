@@ -1,0 +1,26 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - link "메뉴로 돌아가기" [ref=e6] [cursor=pointer]:
+      - /url: /menu
+    - generic [ref=e7]:
+      - img "제주감귤주스" [ref=e8]
+      - generic [ref=e10]:
+        - heading "제주감귤주스" [level=1] [ref=e11]
+        - paragraph [ref=e12]: MANDARIN JUICE
+      - paragraph [ref=e13]: 3,800원
+    - generic [ref=e14]:
+      - heading "옵션" [level=2] [ref=e15]
+      - generic [ref=e16]:
+        - paragraph [ref=e17]: 선택 옵션 없음
+        - paragraph [ref=e18]: 이 상품은 옵션 선택 없이 바로 장바구니에 담을 수 있습니다.
+    - generic [ref=e20]:
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - paragraph [ref=e23]: 선택 옵션 요약
+          - paragraph [ref=e24]: 선택 0개
+        - paragraph [ref=e25]: 0원
+      - paragraph [ref=e26]: 옵션 선택 없이 담을 수 있습니다.
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: 최종 금액
+        - paragraph [ref=e29]: 3,800원
+      - button "장바구니 담기" [ref=e30]

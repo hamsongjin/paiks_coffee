@@ -1,0 +1,88 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - link "메뉴로 돌아가기" [ref=e6] [cursor=pointer]:
+      - /url: /menu
+    - generic [ref=e7]:
+      - img "아메리카노(HOT)" [ref=e8]
+      - generic [ref=e10]:
+        - heading "아메리카노(HOT)" [level=1] [ref=e11]
+        - paragraph [ref=e12]: AMERICANO(HOT)
+      - paragraph [ref=e13]: 1,500원
+    - generic [ref=e14]:
+      - heading "옵션 선택" [level=2] [ref=e15]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e19]:
+            - heading "샷" [level=3] [ref=e20]
+            - generic [ref=e21]: 선택
+          - generic [ref=e22]:
+            - button "연하게 복수 선택 옵션 Lightly 기본" [ref=e23]:
+              - generic [ref=e26]:
+                - generic [ref=e27]:
+                  - generic [ref=e28]: 연하게
+                  - generic [ref=e29]: 복수 선택 옵션
+                - generic [ref=e30]: Lightly
+              - generic [ref=e32]: 기본
+            - generic [ref=e33]:
+              - generic [ref=e36]:
+                - generic [ref=e37]: 샷추가
+                - generic [ref=e38]: 수량 선택 옵션
+                - generic [ref=e39]: Add shot
+                - generic [ref=e40]: 최대 4개
+              - generic [ref=e41]:
+                - generic [ref=e42]: +500원
+                - generic [ref=e43]:
+                  - button "-" [disabled] [ref=e44]
+                  - generic [ref=e45]: "0"
+                  - button "+" [ref=e46]
+        - generic [ref=e47]:
+          - generic [ref=e49]:
+            - heading "토핑" [level=3] [ref=e50]
+            - generic [ref=e51]: 선택
+          - generic [ref=e52]:
+            - generic [ref=e53]:
+              - generic [ref=e56]:
+                - generic [ref=e57]: 펄추가
+                - generic [ref=e58]: 수량 선택 옵션
+                - generic [ref=e59]: Add pearl
+                - generic [ref=e60]: 최대 2개
+              - generic [ref=e61]:
+                - text: 품절
+                - generic [ref=e62]:
+                  - button "-" [disabled] [ref=e63]
+                  - generic [ref=e64]: "0"
+                  - button "+" [disabled] [ref=e65]
+            - generic [ref=e66]:
+              - generic [ref=e69]:
+                - generic [ref=e70]: 헤이즐넛시럽 추가
+                - generic [ref=e71]: 수량 선택 옵션
+                - generic [ref=e72]: Add hazel syrup
+                - generic [ref=e73]: 최대 2개
+              - generic [ref=e74]:
+                - generic [ref=e75]: +500원
+                - generic [ref=e76]:
+                  - button "-" [disabled] [ref=e77]
+                  - generic [ref=e78]: "0"
+                  - button "+" [ref=e79]
+        - generic [ref=e80]:
+          - generic [ref=e82]:
+            - heading "선택" [level=3] [ref=e83]
+            - generic [ref=e84]: 선택
+          - button "물 25ml 적게 복수 선택 옵션 25ml less water 기본" [ref=e86]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e91]: 물 25ml 적게
+                - generic [ref=e92]: 복수 선택 옵션
+              - generic [ref=e93]: 25ml less water
+            - generic [ref=e95]: 기본
+    - generic [ref=e97]:
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - paragraph [ref=e100]: 선택 옵션 요약
+          - paragraph [ref=e101]: 선택 0개
+        - paragraph [ref=e102]: 0원
+      - paragraph [ref=e103]: 선택한 옵션이 없습니다.
+      - generic [ref=e104]:
+        - paragraph [ref=e105]: 최종 금액
+        - paragraph [ref=e106]: 1,500원
+      - button "장바구니 담기" [ref=e107]
